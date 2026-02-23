@@ -1,0 +1,2415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compare Health Insurance | Konkrd</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0A0A0A;
+      --secondary: #6E6E73;
+      --tertiary:  #999999;
+      --border:    #E8E8EA;
+      --surface:   #FFFFFF;
+      --muted:     #FAFAFB;
+      --blue:      #5498F9;
+      --pink:      #ED2EF2;
+      --green:     #10B981;
+    }
+
+    html, body, * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--surface);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ══════════════════════════════════════
+       HEADER — white, blurs over content
+    ══════════════════════════════════════ */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      border-bottom: 1px solid transparent;
+      transition: background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+    }
+
+    .site-header.scrolled {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom-color: var(--border);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+    }
+
+    .header-inner {
+      max-width: 1136px;
+      margin: 0 auto;
+      padding: 0 40px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .konkrd-logo {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      height: 38px;
+    }
+
+    .konkrd-logo img {
+      height: 38px;
+      width: auto;
+      display: block;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 22px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-left: auto;
+    }
+
+    .header-nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--secondary);
+      text-decoration: none;
+      transition: color 0.18s;
+      white-space: nowrap;
+    }
+
+    .header-nav a:hover,
+    .header-nav a.active { color: var(--ink); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* Gradient outline button */
+    .btn-outline-grad {
+      padding: 9px 20px;
+      border-radius: 9px;
+      background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                  linear-gradient(135deg, var(--blue), var(--pink)) border-box;
+      border: 1.5px solid transparent;
+      color: var(--ink);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+
+    .btn-outline-grad:hover {
+      background: linear-gradient(135deg, var(--blue), var(--pink)) padding-box,
+                  linear-gradient(135deg, var(--blue), var(--pink)) border-box;
+      color: #FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    .btn-dark {
+      padding: 9px 20px;
+      border-radius: 9px;
+      background: var(--ink);
+      color: #FFFFFF;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      border: none;
+      transition: background 0.18s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-dark:hover {
+      background: #222;
+      transform: translateY(-1px);
+    }
+
+    /* ══════════════════════════════════════
+       HERO — white bg + animated blobs
+    ══════════════════════════════════════ */
+    .hero {
+      position: relative;
+      background: #FFFFFF;
+      padding: 96px 40px 104px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(64px);
+      z-index: 0;
+    }
+
+    .blob-blue {
+      width: 440px; height: 440px;
+      left: 4%; bottom: 8%;
+      background: radial-gradient(circle, rgba(84,152,249,0.36) 0%, rgba(25,146,246,0.16) 45%, transparent 70%);
+      animation: float-a 14s ease-in-out infinite;
+    }
+
+    .blob-pink {
+      width: 380px; height: 380px;
+      right: 5%; top: 10%;
+      background: radial-gradient(circle, rgba(237,46,242,0.3) 0%, rgba(240,65,216,0.12) 45%, transparent 70%);
+      animation: float-b 16s ease-in-out infinite;
+    }
+
+    .blob-center {
+      width: 700px; height: 400px;
+      left: 50%; top: 56%;
+      transform: translate(-50%,-50%);
+      background: linear-gradient(135deg,
+        rgba(84,152,249,0.2) 0%,
+        rgba(155,123,246,0.14) 30%,
+        rgba(237,46,242,0.2) 60%,
+        rgba(240,65,216,0.12) 100%
+      );
+      filter: blur(72px);
+      animation: morph-center 12s ease-in-out infinite;
+    }
+
+    @keyframes float-a {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%      { transform: translate(28px,-18px) scale(1.06); }
+    }
+    @keyframes float-b {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%      { transform: translate(-24px,22px) scale(1.05); }
+    }
+    @keyframes morph-center {
+      0%   { border-radius:60% 40% 50% 50%/50% 50% 50% 50%; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+      15%  { border-radius:50% 60% 40% 50%/60% 40% 60% 40%; transform:translate(-48%,-52%) scale(1.08,0.95) rotate(2deg); }
+      30%  { border-radius:40% 50% 60% 50%/50% 60% 40% 60%; transform:translate(-52%,-48%) scale(0.95,1.1) rotate(-2deg); }
+      45%  { border-radius:50% 40% 50% 60%/40% 50% 60% 50%; transform:translate(-50%,-53%) scale(1.1,0.92) rotate(3deg); }
+      60%  { border-radius:60% 50% 40% 50%/50% 40% 50% 60%; transform:translate(-47%,-50%) scale(0.93,1.08) rotate(-1deg); }
+      75%  { border-radius:50% 60% 50% 40%/60% 50% 40% 50%; transform:translate(-53%,-47%) scale(1.06,0.97) rotate(2deg); }
+      90%  { border-radius:45% 55% 45% 55%/55% 45% 55% 45%; transform:translate(-50%,-50%) scale(0.97,1.04) rotate(-1deg); }
+      100% { border-radius:60% 40% 50% 50%/50% 50% 50% 50%; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Eyebrow */
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .hero-meet {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.2px;
+    }
+
+    .beta-sticker {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px 3px 8px;
+      background: linear-gradient(135deg, rgba(84,152,249,0.1) 0%, rgba(237,46,242,0.07) 100%);
+      border: 1px solid rgba(84,152,249,0.26);
+      border-radius: 100px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #3B82F6;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .beta-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--pink));
+      animation: blink 2.4s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.3; }
+    }
+
+    /* Heading */
+    .hero h1 {
+      font-size: 58px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      line-height: 1.04;
+      color: var(--ink);
+      margin-bottom: 22px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--pink) 0%, var(--blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-body {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--secondary);
+      line-height: 1.65;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    /* CTAs */
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .cta-main {
+      display: inline-flex;
+      align-items: center;
+      padding: 16px 34px;
+      background: var(--ink);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+    }
+
+    .cta-main:hover {
+      background: #1C1C1C;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.19);
+    }
+
+    /* "New to health insurance?" — gradient outline */
+    .cta-outline-grad {
+      display: inline-flex;
+      align-items: center;
+      padding: 16px 28px;
+      border-radius: 12px;
+      background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                  linear-gradient(135deg, var(--blue), var(--pink)) border-box;
+      border: 1.5px solid transparent;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      transition: all 0.18s;
+    }
+
+    .cta-outline-grad:hover {
+      background: linear-gradient(135deg, var(--blue), var(--pink)) padding-box,
+                  linear-gradient(135deg, var(--blue), var(--pink)) border-box;
+      color: #FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    /* Trustpilot */
+    .trustpilot-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+    }
+
+    .tp-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tp-logo-star {
+      width: 20px; height: 20px;
+      border-radius: 3px;
+      background: #00B67A;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tp-logo-star svg { width: 12px; height: 12px; fill: #FFFFFF; }
+
+    .tp-wordmark {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #191919;
+      letter-spacing: -0.3px;
+    }
+
+    .tp-sep { width: 1px; height: 20px; background: var(--border); }
+
+    .tp-stars { display: flex; gap: 2px; }
+
+    .tp-star {
+      width: 18px; height: 18px;
+      border-radius: 3px;
+      background: #00B67A;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tp-star svg { width: 11px; height: 11px; fill: #FFFFFF; }
+
+    .tp-caption { font-size: 13px; color: var(--secondary); white-space: nowrap; }
+    .tp-caption strong { color: var(--ink); font-weight: 700; }
+
+    /* ══════════════════════════════════════
+       LOGO GRID
+    ══════════════════════════════════════ */
+    .logos-section {
+      position: relative;
+      padding: 56px 40px 64px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .logos-blob {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 900px; height: 500px;
+      background: linear-gradient(135deg,
+        rgba(84,152,249,0.18) 0%,
+        rgba(155,123,246,0.13) 30%,
+        rgba(237,46,242,0.18) 60%,
+        rgba(240,65,216,0.1) 100%
+      );
+      filter: blur(80px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: morph-logos 10s ease-in-out infinite;
+    }
+
+    @keyframes morph-logos {
+      0%,100% { border-radius:60% 40% 55% 45%/55% 45% 50% 50%; transform:translate(-50%,-50%) scale(1); }
+      33%      { border-radius:45% 55% 40% 60%/60% 40% 55% 45%; transform:translate(-50%,-50%) scale(1.06,0.95); }
+      66%      { border-radius:55% 45% 60% 40%/45% 55% 45% 55%; transform:translate(-50%,-50%) scale(0.95,1.06); }
+    }
+
+    .logos-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .logos-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 36px;
+    }
+
+    .logos-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+
+    .logo-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 24px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(232,232,234,0.9);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      transition: box-shadow 0.18s, transform 0.15s, border-color 0.18s;
+      height: 72px;
+    }
+
+    .logo-card:hover {
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+      border-color: rgba(84,152,249,0.2);
+    }
+
+    .logo-card img {
+      height: 20px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+      filter: grayscale(100%) opacity(0.55);
+      transition: filter 0.18s;
+    }
+
+    .logo-card:hover img {
+      filter: grayscale(0%) opacity(1);
+    }
+
+    /* ══════════════════════════════════════
+       COMPARE BY
+    ══════════════════════════════════════ */
+    .compare-section {
+      padding: 80px 40px 96px;
+      background: #FAFAFB;
+      border-top: 1px solid var(--border);
+    }
+
+    .compare-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .compare-headline {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    /* Tabs — active = black */
+    .tabs-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 44px;
+    }
+
+    .tabs {
+      display: inline-flex;
+      background: #E6E6EA;
+      border-radius: 12px;
+      padding: 4px;
+      gap: 2px;
+    }
+
+    .tab-btn {
+      padding: 11px 32px;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--ink);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .tab-btn:not(.active):hover {
+      background: rgba(255,255,255,0.65);
+      color: var(--ink);
+    }
+
+    /* Panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: panel-in 0.28s ease; }
+
+    @keyframes panel-in {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .tab-panel-header {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+
+    .tab-panel-title {
+      font-size: 23px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .tab-panel-body {
+      font-size: 16px;
+      color: var(--secondary);
+      line-height: 1.65;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ── Chat animation cards ─────────────────── */
+    .cover-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .chat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+      transition: box-shadow 0.24s, transform 0.2s;
+      cursor: default;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-card:hover {
+      box-shadow: 0 14px 44px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+    }
+
+    /* ── Chat window ── */
+    .chat-zone {
+      background: #F0F1F5;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+      background-size: 22px 22px;
+      padding: 22px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 196px;
+      flex-shrink: 0;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Typing indicator row ── */
+    .chat-typing-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Konkrd avatar */
+    .chat-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--pink));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: #FFF;
+      letter-spacing: -0.5px;
+      box-shadow: 0 2px 8px rgba(84,152,249,0.35);
+      position: relative;
+    }
+
+    /* Pulsing ring on avatar while typing */
+    .chat-avatar.typing::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 2px solid rgba(84,152,249,0.4);
+      animation: avatar-ring 1.2s ease-in-out infinite;
+    }
+
+    @keyframes avatar-ring {
+      0%,100% { transform: scale(1); opacity: 0.7; }
+      50%      { transform: scale(1.18); opacity: 0; }
+    }
+
+    .chat-typing-bubble {
+      background: #FFFFFF;
+      border-radius: 16px 16px 16px 4px;
+      padding: 10px 16px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #AAAAAA;
+      animation: typing-bounce 1.1s ease-in-out infinite;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.17s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.34s; }
+
+    @keyframes typing-bounce {
+      0%,60%,100% { transform: translateY(0); background: #AAAAAA; }
+      30%          { transform: translateY(-5px); background: #7A7A8A; }
+    }
+
+    /* ── Bot question row ── */
+    .chat-question-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(8px) scale(0.97);
+      transition: opacity 0.36s ease, transform 0.36s ease;
+    }
+
+    .chat-question-bubble {
+      background: #FFFFFF;
+      border-radius: 16px 16px 16px 4px; /* left tail */
+      padding: 11px 16px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--ink);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      line-height: 1.45;
+      max-width: calc(100% - 44px);
+    }
+
+    .chat-timestamp {
+      font-size: 10px;
+      color: #AAAAAA;
+      align-self: flex-end;
+      padding-bottom: 2px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.4s ease 0.2s;
+    }
+
+    /* ── Answer pills row (right-aligned, no wrap) ── */
+    .chat-answers-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 5px;
+      flex-wrap: nowrap;
+    }
+
+    .chat-pill {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 10px;
+      border: 1.5px solid #D4D4DC;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.92);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      opacity: 0;
+      transform: translateX(12px);
+      transition: opacity 0.28s ease, transform 0.28s ease,
+                  background 0.32s ease, color 0.32s ease,
+                  border-color 0.32s ease, box-shadow 0.32s ease;
+      white-space: nowrap;
+      cursor: default;
+      backdrop-filter: blur(4px);
+    }
+
+    .chat-pill.selected {
+      background: linear-gradient(135deg, var(--blue), var(--pink));
+      border-color: transparent;
+      color: #FFFFFF;
+      box-shadow: 0 3px 14px rgba(84,152,249,0.4);
+    }
+
+    /* ── Divider + content ── */
+    .chat-card-divider {
+      height: 1px;
+      background: var(--border);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .chat-card-content {
+      padding: 22px 22px 26px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .chat-card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -0.4px;
+    }
+
+    .chat-card-body {
+      font-size: 13.5px;
+      color: var(--secondary);
+      line-height: 1.65;
+      margin-bottom: 0;
+      flex: 1;
+    }
+
+    .learn-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--blue);
+      text-decoration: none;
+      transition: gap 0.15s;
+      margin-top: auto;
+      padding-top: 20px;
+    }
+    .learn-more:hover { gap: 10px; }
+
+    /* ── Anim state classes (toggled by JS) ── */
+    .chat-card.s-typing    .chat-typing-row                      { opacity: 1; transform: translateY(0); }
+    .chat-card.s-typing    .chat-avatar                          { /* ring handled by .typing class */ }
+    .chat-card.s-question  .chat-question-row                    { opacity: 1; transform: translateY(0) scale(1); }
+    .chat-card.s-question  .chat-timestamp                       { opacity: 1; }
+    .chat-card.s-pill-1    .chat-pill:nth-child(1)               { opacity: 1; transform: translateX(0); }
+    .chat-card.s-pill-2    .chat-pill:nth-child(2)               { opacity: 1; transform: translateX(0); }
+    .chat-card.s-pill-3    .chat-pill:nth-child(3)               { opacity: 1; transform: translateX(0); }
+    .chat-card.s-divider   .chat-card-divider                    { opacity: 1; }
+    .chat-card.s-content   .chat-card-content                    { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════════════════════════════
+       FEATURE SECTIONS (comparison + locker)
+    ══════════════════════════════════════ */
+    .feature-section {
+      background: #EAF3FB;
+      border-top: 1px solid rgba(84,152,249,0.12);
+      padding: 120px 40px;
+      overflow: hidden;
+    }
+
+    .feature-section + .feature-section {
+      background: #F0F6FD;
+      border-top: 1px solid rgba(84,152,249,0.1);
+    }
+
+    .feature-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    /* Reverse layout — text left, phone right */
+    .feature-section--reverse .feature-inner {
+      direction: rtl;
+    }
+    .feature-section--reverse .feature-inner > * {
+      direction: ltr;
+    }
+
+    .feature-text {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .feature-headline {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -1px;
+      line-height: 1.12;
+    }
+
+    .feature-body {
+      font-size: 16px;
+      color: var(--secondary);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    .feature-cta {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      padding: 15px 30px;
+      border-radius: 100px;
+      background: linear-gradient(135deg, var(--blue), var(--pink));
+      color: #FFFFFF;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(84,152,249,0.35);
+      transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+    }
+
+    .feature-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(84,152,249,0.45);
+      filter: brightness(1.06);
+    }
+
+    .feature-phone {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .feature-phone img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.14));
+    }
+
+    @media (max-width: 860px) {
+      .feature-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+      }
+      .feature-section--reverse .feature-inner { direction: ltr; }
+      .feature-section .feature-text { order: 2; }
+      .feature-section .feature-phone { order: 1; }
+      .feature-phone img { max-width: 240px; }
+      .feature-cta { align-self: center; }
+      .feature-body { max-width: 100%; }
+    }
+
+    /* ══════════════════════════════════════
+       HOW TO COMPARE — STEPS
+    ══════════════════════════════════════ */
+    .steps-section {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      padding: 88px 40px 96px;
+    }
+
+    .steps-inner {
+      max-width: 1136px;
+      margin: 0 auto;
+    }
+
+    .steps-headline {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -1px;
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .step-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s, transform 0.18s;
+    }
+
+    .step-card:hover {
+      box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+      transform: translateY(-3px);
+    }
+
+    /* Icon zone — gradient border circle matching Why Konkrd style */
+    .step-icon-zone {
+      background: #FAFAFA;
+      padding: 32px 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-icon-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      background:
+        linear-gradient(white, white) padding-box,
+        linear-gradient(135deg, var(--blue), var(--pink)) border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+    }
+
+    .step-body {
+      padding: 22px 20px 26px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .step-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.01em;
+      margin-bottom: 10px;
+    }
+
+    .step-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+    }
+
+    .step-copy {
+      font-size: 13.5px;
+      color: var(--secondary);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    @media (max-width: 1024px) {
+      .steps-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .steps-headline { font-size: 26px; }
+    }
+
+    /* ══════════════════════════════════════
+       SMARTER POLICIES SECTION
+    ══════════════════════════════════════ */
+    .policies-section {
+      background: #E8F3FA;
+      border-top: 1px solid rgba(84,152,249,0.1);
+      padding: 96px 40px;
+      overflow: hidden;
+    }
+
+    .policies-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .policies-text {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .policies-headline {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -1.2px;
+      line-height: 1.1;
+    }
+
+    .policies-body {
+      font-size: 15px;
+      color: var(--secondary);
+      line-height: 1.72;
+      max-width: 480px;
+    }
+
+    /* 3×2 icon grid */
+    .policies-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .policy-card {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow: 0 2px 16px rgba(84,152,249,0.07);
+      padding: 28px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .policy-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 32px rgba(84,152,249,0.13);
+    }
+
+    .policy-icon {
+      width: 88px;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .policy-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .policy-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .policies-inner { grid-template-columns: 1fr; gap: 48px; }
+      .policies-headline { font-size: 30px; }
+      .policies-grid { max-width: 480px; margin: 0 auto; }
+    }
+
+    /* ══════════════════════════════════════
+       WHY KONKRD
+    ══════════════════════════════════════ */
+    .why-section {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      padding: 88px 40px 96px;
+    }
+
+    .why-inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .why-headline {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -1px;
+      margin-bottom: 56px;
+    }
+
+    .why-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .why-item {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    /* Left column: icon circle + connecting line */
+    .why-icon-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 60px;
+    }
+
+    .why-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      background:
+        linear-gradient(white, white) padding-box,
+        linear-gradient(135deg, var(--blue), var(--pink)) border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .why-line {
+      width: 1.5px;
+      flex: 1;
+      min-height: 48px;
+      background: linear-gradient(to bottom, rgba(84,152,249,0.35), rgba(237,46,242,0.25));
+      margin: 0 auto;
+    }
+
+    /* No line after last item */
+    .why-item.last .why-icon-col { justify-content: flex-start; }
+
+    /* Right column: text */
+    .why-text {
+      padding-top: 14px;
+      padding-bottom: 52px;
+      flex: 1;
+    }
+
+    .why-item.last .why-text {
+      padding-bottom: 0;
+    }
+
+    .why-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.4px;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .why-copy {
+      font-size: 15px;
+      color: var(--secondary);
+      line-height: 1.7;
+      max-width: 620px;
+    }
+
+    @media (max-width: 640px) {
+      .why-headline { font-size: 28px; }
+      .why-title { font-size: 17px; }
+      .why-icon { width: 48px; height: 48px; }
+      .why-icon-col { width: 48px; }
+      .why-text { padding-bottom: 40px; }
+    }
+
+    /* ══════════════════════════════════════
+       EXPERT SECTION — PAUL MINEO
+    ══════════════════════════════════════ */
+    .expert-section {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      padding: 0 40px 0 0;
+      overflow: hidden;
+    }
+
+    .expert-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 72px;
+      align-items: end;
+    }
+
+    /* Photo — flush to bottom, no top padding */
+    .expert-photo {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .expert-photo img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .expert-content {
+      padding: 80px 0 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .expert-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--blue), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .expert-headline {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      max-width: 520px;
+    }
+
+    .expert-nameplate {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: #F7F8FA;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      align-self: flex-start;
+    }
+
+    .expert-avatar-ring {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid transparent;
+      background:
+        linear-gradient(white, white) padding-box,
+        linear-gradient(135deg, var(--blue), var(--pink)) border-box;
+      flex-shrink: 0;
+    }
+
+    .expert-avatar-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .expert-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .expert-role {
+      font-size: 12.5px;
+      color: var(--secondary);
+      margin-top: 2px;
+    }
+
+    .expert-bio {
+      font-size: 15px;
+      color: var(--secondary);
+      line-height: 1.72;
+      max-width: 520px;
+    }
+
+    @media (max-width: 860px) {
+      .expert-section { padding: 0 20px; }
+      .expert-inner { grid-template-columns: 1fr; gap: 0; }
+      .expert-photo { justify-content: center; }
+      .expert-photo img { max-width: 280px; }
+      .expert-content { padding: 40px 0 60px; }
+      .expert-headline { font-size: 24px; }
+    }
+
+    /* ══════════════════════════════════════
+       FAQ ACCORDION
+    ══════════════════════════════════════ */
+    .faq-section {
+      background: #F7F8FA;
+      border-top: 1px solid var(--border);
+      padding: 88px 40px 96px;
+    }
+
+    .faq-inner {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .faq-headline {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -1px;
+      margin-bottom: 40px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .faq-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      background: #E8F1FB;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--ink);
+      text-align: left;
+      transition: background 0.2s;
+    }
+
+    .faq-trigger:hover {
+      background: #ddeaf8;
+    }
+
+    .faq-trigger[aria-expanded="true"] {
+      background: #ddeaf8;
+    }
+
+    .faq-icon {
+      flex-shrink: 0;
+      color: var(--ink);
+      transition: transform 0.3s ease;
+    }
+
+    /* Rotate the vertical bar of the + to make × when open */
+    .faq-trigger[aria-expanded="true"] .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-body {
+      background: #EEF4FC;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0 24px;
+    }
+
+    .faq-body.open {
+      max-height: 400px;
+      padding: 18px 24px 22px;
+    }
+
+    .faq-body p {
+      font-size: 14.5px;
+      color: var(--secondary);
+      line-height: 1.72;
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      .faq-headline { font-size: 26px; }
+      .faq-trigger { font-size: 14px; padding: 16px 18px; }
+    }
+
+    /* ══════════════════════════════════════
+       FINAL CTA SECTION
+    ══════════════════════════════════════ */
+    .final-cta-section {
+      background: radial-gradient(ellipse at 20% 50%, rgba(80, 20, 120, 0.85) 0%, #0d1117 40%, #0a1628 70%, rgba(10, 30, 80, 0.9) 100%);
+      padding: 120px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle blue glow top-right */
+    .final-cta-section::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -80px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(30, 80, 180, 0.35) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .final-cta-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .final-cta-headline {
+      font-size: 56px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: -2px;
+      line-height: 1.05;
+    }
+
+    .final-cta-gradient {
+      background: linear-gradient(135deg, var(--blue), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .final-cta-sub {
+      font-size: 18px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+      margin-top: 4px;
+    }
+
+    .final-cta-buttons {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .final-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 16px 32px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+
+    .final-btn--primary {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1.5px solid transparent;
+      background-image: linear-gradient(#0d1117, #0d1117),
+                        linear-gradient(135deg, var(--blue), var(--pink));
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+    }
+
+    .final-btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(84,152,249,0.3);
+    }
+
+    .final-btn--secondary {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1.5px solid rgba(255,255,255,0.25);
+    }
+
+    .final-btn--secondary:hover {
+      border-color: rgba(255,255,255,0.5);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 640px) {
+      .final-cta-headline { font-size: 36px; letter-spacing: -1px; }
+      .final-cta-sub { font-size: 15px; }
+      .final-btn { width: 100%; justify-content: center; }
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    .site-footer {
+      background: var(--ink);
+      border-top: 1px solid #E8E8EA;
+      padding: 80px 40px;
+    }
+
+    .footer-container {
+      max-width: 1136px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 48px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: #6E6E73;
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .footer-links a:hover { color: #FAFAFB; }
+
+    .footer-legal {
+      font-size: 13px;
+      color: #999999;
+      line-height: 1.8;
+      text-align: center;
+      max-width: 800px;
+    }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 960px) {
+      .header-nav { display: none; }
+      .cover-cards { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+      .logos-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 20px; gap: 12px; }
+      .header-divider { display: none; }
+      .btn-outline-grad { display: none; }
+      .hero { padding: 72px 20px 80px; }
+      .hero h1 { font-size: 40px; letter-spacing: -1.4px; font-weight: 700; }
+      .hero-body { font-size: 16px; }
+      .logos-section, .compare-section, .site-footer { padding-left: 20px; padding-right: 20px; }
+      .compare-headline { font-size: 30px; }
+      .tabs { flex-direction: column; width: 100%; }
+      .trustpilot-wrap { flex-wrap: wrap; justify-content: center; gap: 10px; }
+      .logos-grid { grid-template-columns: repeat(3, 1fr); }
+      .logo-card { padding: 14px 16px; height: 60px; }
+      .footer-links { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═════════════════ HEADER ═════════════════ -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+
+      <a href="/" class="konkrd-logo">
+        <img src="konkrd_logo_lockup.svg" alt="Konkrd — Life Admin Conquered." />
+      </a>
+
+      <div class="header-divider"></div>
+
+      <nav class="header-nav">
+        <a href="#" class="active">Health Insurance</a>
+        <a href="#">Life Insurance</a>
+        <a href="#">Energy</a>
+        <a href="#">Broadband</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#chat" class="btn-outline-grad">New to health insurance?</a>
+        <a href="#chat" class="btn-dark">Find your perfect policy →</a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ═════════════════ HERO ═════════════════ -->
+  <section class="hero" id="top">
+
+    <div class="blob blob-blue"></div>
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-center"></div>
+
+    <div class="hero-content" id="chat">
+
+      <div class="hero-eyebrow">
+        <span class="hero-meet">Meet Konkrd AI</span>
+        <span class="beta-sticker">
+          <span class="beta-dot"></span>
+          Beta
+        </span>
+      </div>
+
+      <h1>Start Conquering Your<br><span class="gradient-text">Health Insurance</span></h1>
+
+      <p class="hero-body">
+        We review and compare hundreds of Health Insurance products from every fund in the market. Our AI makes it simple, our people are here if you need them, and we'll never hassle you with unwanted calls. It's health insurance, finally on your terms.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#" class="cta-main">Find your perfect policy</a>
+        <a href="#" class="cta-outline-grad">New to health insurance? →</a>
+      </div>
+
+      <!-- Trustpilot -->
+      <div class="trustpilot-wrap">
+        <div class="tp-logo">
+          <div class="tp-logo-star">
+            <svg viewBox="0 0 10 10"><path d="M5 .5l1.18 3.63H10L6.91 6.19l1.18 3.63L5 7.76l-3.09 2.06L3.09 6.19.5 4.13h3.32L5 .5z"/></svg>
+          </div>
+          <span class="tp-wordmark">Trustpilot</span>
+        </div>
+        <div class="tp-sep"></div>
+        <div class="tp-stars">
+          <div class="tp-star"><svg viewBox="0 0 10 10"><path d="M5 .5l1.18 3.63H10L6.91 6.19l1.18 3.63L5 7.76l-3.09 2.06L3.09 6.19.5 4.13h3.32L5 .5z"/></svg></div>
+          <div class="tp-star"><svg viewBox="0 0 10 10"><path d="M5 .5l1.18 3.63H10L6.91 6.19l1.18 3.63L5 7.76l-3.09 2.06L3.09 6.19.5 4.13h3.32L5 .5z"/></svg></div>
+          <div class="tp-star"><svg viewBox="0 0 10 10"><path d="M5 .5l1.18 3.63H10L6.91 6.19l1.18 3.63L5 7.76l-3.09 2.06L3.09 6.19.5 4.13h3.32L5 .5z"/></svg></div>
+          <div class="tp-star"><svg viewBox="0 0 10 10"><path d="M5 .5l1.18 3.63H10L6.91 6.19l1.18 3.63L5 7.76l-3.09 2.06L3.09 6.19.5 4.13h3.32L5 .5z"/></svg></div>
+          <div class="tp-star"><svg viewBox="0 0 10 10"><path d="M5 .5l1.18 3.63H10L6.91 6.19l1.18 3.63L5 7.76l-3.09 2.06L3.09 6.19.5 4.13h3.32L5 .5z"/></svg></div>
+        </div>
+        <div class="tp-caption"><strong>4.8</strong> out of 5 &nbsp;·&nbsp; <strong>1,200+</strong> reviews</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════ LOGO GRID ═════════════════ -->
+  <section class="logos-section">
+    <div class="logos-blob"></div>
+    <div class="logos-inner">
+      <p class="logos-label">We compare every major Australian health fund</p>
+      <div class="logos-grid">
+        <!-- Row 1 -->
+        <div class="logo-card"><img src="logo-frank.svg" alt="frank health" /></div>
+        <div class="logo-card"><img src="logo-bupa-colour.svg" alt="Bupa" /></div>
+        <div class="logo-card"><img src="logo-peoplecare.svg" alt="Peoplecare" /></div>
+        <div class="logo-card"><img src="logo-aia-colour.svg" alt="AIA" /></div>
+        <div class="logo-card"><img src="logo-nib.svg" alt="NIB" /></div>
+        <div class="logo-card"><img src="logo-ing.svg" alt="ING" /></div>
+        <!-- Row 2 -->
+        <div class="logo-card"><img src="logo-aami-colour.svg" alt="AAMI" /></div>
+        <div class="logo-card"><img src="logo-ing.svg" alt="ING" /></div>
+        <div class="logo-card"><img src="logo-nib.svg" alt="NIB" /></div>
+        <div class="logo-card"><img src="logo-frank.svg" alt="frank health" /></div>
+        <div class="logo-card"><img src="logo-peoplecare.svg" alt="Peoplecare" /></div>
+        <div class="logo-card"><img src="logo-bupa-colour.svg" alt="Bupa" /></div>
+        <!-- Row 3 -->
+        <div class="logo-card"><img src="logo-aia-colour.svg" alt="AIA" /></div>
+        <div class="logo-card"><img src="logo-aami-colour.svg" alt="AAMI" /></div>
+        <div class="logo-card"><img src="logo-bupa-colour.svg" alt="Bupa" /></div>
+        <div class="logo-card"><img src="logo-ing.svg" alt="ING" /></div>
+        <div class="logo-card"><img src="logo-frank.svg" alt="frank health" /></div>
+        <div class="logo-card"><img src="logo-peoplecare.svg" alt="Peoplecare" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════════════ COMPARE BY ═════════════════ -->
+  <section class="compare-section">
+    <div class="compare-inner">
+
+      <h2 class="compare-headline">Compare Your Health Insurance By</h2>
+
+      <div class="tabs-wrap">
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="cover-type" role="tab" aria-selected="true">Cover type</button>
+          <button class="tab-btn" data-tab="life-stage" role="tab" aria-selected="false">Life Stage</button>
+          <button class="tab-btn" data-tab="fundamentals" role="tab" aria-selected="false">Fundamentals</button>
+        </div>
+      </div>
+
+      <!-- ─── Cover type ─── -->
+      <div class="tab-panel active" id="cover-type">
+        <div class="tab-panel-header">
+          <h3 class="tab-panel-title">Cover type that's right for me?</h3>
+          <p class="tab-panel-body">Not all cover is created equal. Whether you're after hospital cover, extras, or a mix of both, Konkrd compares every fund with hundreds of Health Insurance products, side by side. No favourites, no filters, no fluff. Just the right cover, for you.</p>
+        </div>
+        <div class="cover-cards">
+
+          <!-- Card 1: Hospital Cover -->
+          <div class="chat-card" data-card="hospital">
+            <div class="chat-zone">
+
+              <!-- Typing indicator -->
+              <div class="chat-typing-row">
+                <div class="chat-avatar typing">K</div>
+                <div class="chat-typing-bubble">
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                </div>
+              </div>
+
+              <!-- Bot question -->
+              <div class="chat-question-row">
+                <div class="chat-avatar">K</div>
+                <div class="chat-question-bubble">Who's this cover for?</div>
+                <div class="chat-timestamp">just now</div>
+              </div>
+
+              <!-- Answer pills -->
+              <div class="chat-answers-row">
+                <div class="chat-pill">🧑 Just me</div>
+                <div class="chat-pill selected">👫 Me + partner</div>
+                <div class="chat-pill">👨‍👩‍👧 Family</div>
+              </div>
+
+            </div>
+            <div class="chat-card-divider"></div>
+            <div class="chat-card-content">
+              <h4 class="chat-card-title">Hospital Cover</h4>
+              <p class="chat-card-body">Be treated as a private patient in hospital. Choose your own doctor, skip public waiting lists, and get the level of care you deserve for elective procedures.</p>
+              <a href="#" class="learn-more">Learn More →</a>
+            </div>
+          </div>
+
+          <!-- Card 2: Hospital & Extras -->
+          <div class="chat-card" data-card="extras">
+            <div class="chat-zone">
+
+              <div class="chat-typing-row">
+                <div class="chat-avatar typing">K</div>
+                <div class="chat-typing-bubble">
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                </div>
+              </div>
+
+              <div class="chat-question-row">
+                <div class="chat-avatar">K</div>
+                <div class="chat-question-bubble">What's most important to cover?</div>
+                <div class="chat-timestamp">just now</div>
+              </div>
+
+              <div class="chat-answers-row">
+                <div class="chat-pill selected">🦷 Dental</div>
+                <div class="chat-pill">👁 Optical</div>
+                <div class="chat-pill">🏃 Physio</div>
+              </div>
+
+            </div>
+            <div class="chat-card-divider"></div>
+            <div class="chat-card-content">
+              <h4 class="chat-card-title">Hospital &amp; Extras Cover</h4>
+              <p class="chat-card-body">Extras cover pays for the healthcare Medicare doesn't — dental, optical, physio and more. Pair it with hospital cover for protection that goes the distance.</p>
+              <a href="#" class="learn-more">Learn More →</a>
+            </div>
+          </div>
+
+          <!-- Card 3: Ambulance Cover -->
+          <div class="chat-card" data-card="ambulance">
+            <div class="chat-zone">
+
+              <div class="chat-typing-row">
+                <div class="chat-avatar typing">K</div>
+                <div class="chat-typing-bubble">
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                </div>
+              </div>
+
+              <div class="chat-question-row">
+                <div class="chat-avatar">K</div>
+                <div class="chat-question-bubble">Which state do you live in?</div>
+                <div class="chat-timestamp">just now</div>
+              </div>
+
+              <div class="chat-answers-row">
+                <div class="chat-pill">🌏 NSW / VIC</div>
+                <div class="chat-pill">☀️ QLD</div>
+                <div class="chat-pill selected">🌾 Rural / WA</div>
+              </div>
+
+            </div>
+            <div class="chat-card-divider"></div>
+            <div class="chat-card-content">
+              <h4 class="chat-card-title">Ambulance Cover</h4>
+              <p class="chat-card-body">Some states cover ambulance costs — but not all. If yours doesn't, a single emergency call-out can cost thousands. Ambulance cover means you're never left with that bill.</p>
+              <a href="#" class="learn-more">Learn More →</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── Life Stage ─── -->
+      <div class="tab-panel" id="life-stage">
+        <div class="tab-panel-header">
+          <h3 class="tab-panel-title">Find cover that fits your life stage</h3>
+          <p class="tab-panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+        <div class="cover-cards">
+          <div class="cover-card">
+            <div class="card-icon-wrap">🧑</div>
+            <h4 class="cover-card-title">Lorem Ipsum</h4>
+            <p class="cover-card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation.</p>
+            <a href="#" class="learn-more">Learn More →</a>
+          </div>
+          <div class="cover-card">
+            <div class="card-icon-wrap">👨‍👩‍👧</div>
+            <h4 class="cover-card-title">Lorem Ipsum</h4>
+            <p class="cover-card-body">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident sunt culpa.</p>
+            <a href="#" class="learn-more">Learn More →</a>
+          </div>
+          <div class="cover-card">
+            <div class="card-icon-wrap">🌿</div>
+            <h4 class="cover-card-title">Lorem Ipsum</h4>
+            <p class="cover-card-body">Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem.</p>
+            <a href="#" class="learn-more">Learn More →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Fundamentals ─── -->
+      <div class="tab-panel" id="fundamentals">
+        <div class="tab-panel-header">
+          <h3 class="tab-panel-title">Understand the fundamentals</h3>
+          <p class="tab-panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam nisi ut aliquid ex ea commodi consequatur.</p>
+        </div>
+        <div class="cover-cards">
+          <div class="cover-card">
+            <div class="card-icon-wrap">📋</div>
+            <h4 class="cover-card-title">Lorem Ipsum</h4>
+            <p class="cover-card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation.</p>
+            <a href="#" class="learn-more">Learn More →</a>
+          </div>
+          <div class="cover-card">
+            <div class="card-icon-wrap">⏳</div>
+            <h4 class="cover-card-title">Lorem Ipsum</h4>
+            <p class="cover-card-body">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident culpa.</p>
+            <a href="#" class="learn-more">Learn More →</a>
+          </div>
+          <div class="cover-card">
+            <div class="card-icon-wrap">💰</div>
+            <h4 class="cover-card-title">Lorem Ipsum</h4>
+            <p class="cover-card-body">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+            <a href="#" class="learn-more">Learn More →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════ AI COMPARISON SECTION ═════════════════ -->
+  <section class="feature-section">
+    <div class="feature-inner">
+
+      <div class="feature-text">
+        <h2 class="feature-headline">AI powered comparison</h2>
+        <p class="feature-body">Our Comparison starts with a simple set of questions about your needs. We compare every private health fund and hundreds of health insurance products side by side. With Konkrd AI explaining the fine print in plain talk, you get a complete comparison you can trust — on your terms, without the phone calls.</p>
+        <a href="#chat" class="feature-cta">Start to Compare Now</a>
+      </div>
+
+      <div class="feature-phone">
+        <img src="compare_mobile.webp" alt="Konkrd AI comparison screen" />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════ POLICY LOCKER SECTION ═════════════════ -->
+  <section class="feature-section">
+    <div class="feature-inner">
+
+      <div class="feature-phone">
+        <img src="locker_mobile.webp" alt="Konkrd Digital Policy Locker" />
+      </div>
+
+      <div class="feature-text">
+        <h2 class="feature-headline">Your Digital Policy Locker</h2>
+        <p class="feature-body">Your Digital Policy Locker keeps your important policy documents such as health, car, pet, travel and more in one secure place. Upload once, and whenever you need answers, just ask — Konkrd AI will explain your health cover in plain talk, so you always know what you're really getting.</p>
+        <a href="#chat" class="feature-cta">Create Your Policy Locker</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════ HOW TO COMPARE ═════════════════ -->
+  <section class="steps-section">
+    <div class="steps-inner">
+
+      <h2 class="steps-headline">How to Compare with Konkrd?</h2>
+
+      <div class="steps-grid">
+
+        <div class="step-card">
+          <div class="step-icon-zone">
+            <div class="step-icon-circle">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4z" fill="currentColor"/></svg>
+            </div>
+          </div>
+          <div class="step-body">
+            <span class="step-label">Step 1</span>
+            <h3 class="step-title">Select Your Current Policy</h3>
+            <p class="step-copy">Drop in your existing cover so we can compare apples with apples. If you don't know it, its fine!</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-icon-zone">
+            <div class="step-icon-circle">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" fill="currentColor" opacity="0.2"/><circle cx="8" cy="10" r="1.5" fill="currentColor"/><circle cx="12" cy="10" r="1.5" fill="currentColor"/><circle cx="16" cy="10" r="1.5" fill="currentColor"/></svg>
+            </div>
+          </div>
+          <div class="step-body">
+            <span class="step-label">Step 2</span>
+            <h3 class="step-title">Tell Us About What You Need</h3>
+            <p class="step-copy">We'll get to know your needs, so the results actually fit your life — not just a checkbox.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-icon-zone">
+            <div class="step-icon-circle">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="9" height="18" rx="2" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/><rect x="13" y="3" width="9" height="18" rx="2" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.5"/><path d="M5 7h3M5 10h3M5 13h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M16 7h3M16 10h3M16 13h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="step-body">
+            <span class="step-label">Step 3</span>
+            <h3 class="step-title">Let Us Do the Hard Work For You</h3>
+            <p class="step-copy">Our AI digital broker shows you hundreds of health insurance products in the market, side by side. If you need us, feel free to reach out!</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-icon-zone">
+            <div class="step-icon-circle">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 12l3 3 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="step-body">
+            <span class="step-label">Step 4</span>
+            <h3 class="step-title">Choose What Suits You</h3>
+            <p class="step-copy">Switch or pick a product from one of our partners, or even a non-partner fund — if it's right for you, it's right for us.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-icon-zone">
+            <div class="step-icon-circle">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="2" width="14" height="20" rx="2" fill="currentColor" opacity="0.2"/><path d="M8 7h8M8 11h6M8 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="16" cy="16" r="3.5" fill="currentColor"/><path d="M15 16l.8.8 1.5-1.6" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="step-body">
+            <span class="step-label">Step 5</span>
+            <h3 class="step-title">Store It in Your Policy Locker</h3>
+            <p class="step-copy">Whether you switch or stay put, keep your cover safe in your own secure Locker — one place for all your policies, explained in plain talk.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════════════ WHY KONKRD ═════════════════ -->
+  <section class="why-section">
+    <div class="why-inner">
+
+      <h2 class="why-headline">Why Konkrd?</h2>
+
+      <div class="why-list">
+
+        <div class="why-item">
+          <div class="why-icon-col">
+            <div class="why-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 10h16M4 14h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.25"/><path d="M17 17l2 2 3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="why-line"></div>
+          </div>
+          <div class="why-text">
+            <h3 class="why-title">100's of Products. All Funds.</h3>
+            <p class="why-copy">We show hundreds of Health Insurance Products in the market — easily purchase directly from our partners funds, while still being informed of other non-partner products.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-icon-col">
+            <div class="why-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="currentColor" opacity="0.15"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18.5" cy="5.5" r="2.5" fill="currentColor"/><path d="M17.5 5.5l.7.7 1.3-1.2" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="why-line"></div>
+          </div>
+          <div class="why-text">
+            <h3 class="why-title">AI That Cuts Through the Fine Print.</h3>
+            <p class="why-copy">Insurance can be confusing. Our AI translates policies into plain English so people actually understand what they're covered for.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-icon-col">
+            <div class="why-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" fill="currentColor" opacity="0.2"/><path d="M8 7h8M8 11h6M8 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="16" cy="16" r="3.5" fill="currentColor"/><path d="M15 16l.8.8 1.5-1.6" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="why-line"></div>
+          </div>
+          <div class="why-text">
+            <h3 class="why-title">Your Policy Locker.</h3>
+            <p class="why-copy">All your policies in one place — Health, Car, Travel, Pet, etc. No more email hunts, no more app overload, just a locker that saves time and keeps you sorted.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-icon-col">
+            <div class="why-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.47 11.47 0 0 0 3.58.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2z" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="1.5"/><line x1="18" y1="2" x2="22" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="2" x2="18" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="why-line"></div>
+          </div>
+          <div class="why-text">
+            <h3 class="why-title">No Pushy Calls. Ever.</h3>
+            <p class="why-copy">Take your time comparing knowing we won't bother you, unless you want us to.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-icon-col">
+            <div class="why-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="1.5"/><path d="M14 2v6h6M10 13h4M10 17h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="17" cy="17" r="3" fill="currentColor" opacity="0.9"/><circle cx="17" cy="17" r="1.2" fill="white"/></svg>
+            </div>
+            <div class="why-line"></div>
+          </div>
+          <div class="why-text">
+            <h3 class="why-title">Compare on Your Terms.</h3>
+            <p class="why-copy">Compare your way — online, in chat, or with a human when you want one.</p>
+          </div>
+        </div>
+
+        <div class="why-item last">
+          <div class="why-icon-col">
+            <div class="why-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.4 4.8 5.3.8-3.85 3.75.91 5.3L12 14.25l-4.76 2.4.91-5.3L4.3 7.6l5.3-.8L12 2z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="why-text">
+            <h3 class="why-title">Life Admin, Finally Conquered.</h3>
+            <p class="why-copy">Health cover's just the beginning. We make the boring stuff easier, all in one spot.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════════════ SMARTER POLICIES SECTION ═════════════════ -->
+  <section class="policies-section">
+    <div class="policies-inner">
+
+      <div class="policies-text">
+        <h2 class="policies-headline">The Smarter Way to Manage Your Policies.</h2>
+        <p class="policies-body">Say goodbye to lost emails, buried paperwork, and confusing fine print. With your Personal Policy Locker, securely store key life admin and policy documents — health, car, pet, travel, and more.</p>
+        <p class="policies-body">Konkrd AI cuts through the jargon to show what you're really covered for in plain talk*. It's your all-in-one command centre for life admin.</p>
+        <a href="#chat" class="feature-cta">Create Your Policy Locker</a>
+      </div>
+
+      <div class="policies-grid">
+        <div class="policy-card">
+          <div class="policy-icon"><img src="health_policies.webp" alt="Health Insurance" /></div>
+          <span class="policy-label">Health Insurance</span>
+        </div>
+        <div class="policy-card">
+          <div class="policy-icon"><img src="pet_policies.webp" alt="Pet Insurance" /></div>
+          <span class="policy-label">Pet Insurance</span>
+        </div>
+        <div class="policy-card">
+          <div class="policy-icon"><img src="travel_policies.webp" alt="Travel Insurance" /></div>
+          <span class="policy-label">Travel Insurance</span>
+        </div>
+        <div class="policy-card">
+          <div class="policy-icon"><img src="home_policies.webp" alt="Home Insurance" /></div>
+          <span class="policy-label">Home Insurance</span>
+        </div>
+        <div class="policy-card">
+          <div class="policy-icon"><img src="credit_card_policies.webp" alt="Credit card" /></div>
+          <span class="policy-label">Credit card</span>
+        </div>
+        <div class="policy-card">
+          <div class="policy-icon"><img src="energy_policies.webp" alt="Energy" /></div>
+          <span class="policy-label">Energy</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════ EXPERT — PAUL MINEO ═════════════════ -->
+  <section class="expert-section">
+    <div class="expert-inner">
+
+      <div class="expert-photo">
+        <img src="paul_mineo.jpeg" alt="Paul Mineo, Chief Operating Officer" />
+      </div>
+
+      <div class="expert-content">
+        <p class="expert-eyebrow">Health Insurance Questions Answered</p>
+        <h2 class="expert-headline">Your Health Insurance Questions Answered by our Private Health Insurance Expert</h2>
+        <div class="expert-nameplate">
+          <div class="expert-avatar-ring">
+            <img src="paul_mineo.jpeg" alt="Paul Mineo" />
+          </div>
+          <div>
+            <div class="expert-name">Paul Mineo</div>
+            <div class="expert-role">Chief Operating Officer, Konkrd</div>
+          </div>
+        </div>
+        <p class="expert-bio">Paul Mineo, Chief Operating Officer of Konkrd Life Admin AI service, is a true expert in private health insurance — from time on the phones helping customers, to leading commercial strategy, and everything in between, with over two decades of experience across sales, operations, and insurance markets.</p>
+        <p class="expert-bio">Driven by a belief that the customer should always come first, Paul is helping shape a new kind of service, one that challenges the old model and redefines what great advice and genuine support can look like.</p>
+        <a href="#chat" class="feature-cta">Ask Paul a Question</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════ FAQ ═════════════════ -->
+  <section class="faq-section">
+    <div class="faq-inner">
+
+      <h2 class="faq-headline">Frequently Asked Questions</h2>
+
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>What is private health insurance?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="4" x2="10" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>How does private health insurance work?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="4" x2="10" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>What does private health insurance cover?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="4" x2="10" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>What is the private health insurance rebate?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="4" x2="10" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>What does private health insurance cover that Medicare doesn't?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="4" x2="10" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>What is Lifetime Health Cover loading?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="4" x2="10" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>Does Medicare cover ambulance services?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="4" x2="10" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="faq-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═════════════════ FINAL CTA ═════════════════ -->
+  <section class="final-cta-section">
+    <div class="final-cta-inner">
+      <h2 class="final-cta-headline">Your perfect <span class="final-cta-gradient">policy</span> is waiting.</h2>
+      <p class="final-cta-sub">Let our AI do what comparison sites can't. Independent. Intelligent. Immediate.</p>
+      <div class="final-cta-buttons">
+        <a href="#chat" class="final-btn final-btn--primary">Start Chatting Now →</a>
+        <a href="#chat" class="final-btn final-btn--secondary">Rather chat to a human? Click here</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════════════ FOOTER ═════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <nav class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact</a>
+      </nav>
+      <div class="footer-legal">
+        Konkrd Pty Ltd | ABN: XX XXX XXX XXX | AFSL: XXXXXX<br>
+        General advice only. We don't provide financial advice. Read the PDS before deciding.<br>
+        © 2026 Konkrd. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Header scroll effect ──────────────────────
+    const header = document.getElementById('site-header');
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 12);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Tab switching ─────────────────────────────
+    const tabBtns   = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+        tabPanels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected','true');
+        const panel = document.getElementById(btn.dataset.tab);
+        if (!panel) return;
+        panel.classList.add('active');
+        if (btn.dataset.tab === 'cover-type') {
+          panel.querySelectorAll('.chat-card').forEach((card, i) => {
+            resetCard(card);
+            setTimeout(() => runCard(card), i * 280);
+          });
+        }
+      });
+    });
+
+    // ── Animation sequence ────────────────────────
+    // Steps: show typing → hide typing / show question → pills stagger in
+    //        → reply bubble appears → divider → content
+
+    const STEPS = [
+      { fn: 'typing-on',   delay: 0    },
+      { fn: 'typing-off',  delay: 900  },
+      { fn: 'pill-1',      delay: 1100 },
+      { fn: 'pill-2',      delay: 1280 },
+      { fn: 'pill-3',      delay: 1460 },
+      { fn: 'divider',     delay: 1700 },
+      { fn: 'content',     delay: 1860 },
+    ];
+
+    const ALL_STATES = ['s-typing','s-question','s-pill-1','s-pill-2','s-pill-3','s-divider','s-content'];
+
+    function resetCard(card) {
+      ALL_STATES.forEach(s => card.classList.remove(s));
+      if (card._timers) card._timers.forEach(t => clearTimeout(t));
+      card._timers = [];
+      card.querySelectorAll('.chat-avatar').forEach(a => a.classList.remove('typing'));
+    }
+
+    function runCard(card) {
+      const timers = [];
+      STEPS.forEach(({ fn, delay }) => {
+        timers.push(setTimeout(() => {
+          switch(fn) {
+            case 'typing-on':
+              card.classList.add('s-typing');
+              card.querySelectorAll('.chat-avatar').forEach(a => a.classList.add('typing'));
+              break;
+            case 'typing-off':
+              card.classList.remove('s-typing');
+              card.querySelectorAll('.chat-avatar').forEach(a => a.classList.remove('typing'));
+              card.classList.add('s-question');
+              break;
+            case 'pill-1':   card.classList.add('s-pill-1');  break;
+            case 'pill-2':   card.classList.add('s-pill-2');  break;
+            case 'pill-3':   card.classList.add('s-pill-3');  break;
+            case 'divider':  card.classList.add('s-divider'); break;
+            case 'content':  card.classList.add('s-content'); break;
+          }
+        }, delay));
+      });
+      card._timers = timers;
+    }
+
+    // ── Scroll trigger (fires once) ───────────────
+    const played = new WeakSet();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !played.has(entry.target)) {
+          played.add(entry.target);
+          entry.target.querySelectorAll('.chat-card').forEach((card, i) => {
+            resetCard(card);
+            setTimeout(() => runCard(card), i * 280);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    const coverPanel = document.getElementById('cover-type');
+    if (coverPanel) observer.observe(coverPanel);
+
+    // ── FAQ Accordion ─────────────────────────
+    document.querySelectorAll('.faq-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const item = trigger.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
