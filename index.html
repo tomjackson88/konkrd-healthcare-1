@@ -165,6 +165,10 @@
       padding: 96px 40px 104px;
       text-align: center;
       overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .blob {
@@ -485,12 +489,12 @@
       max-width: 100%;
       object-fit: contain;
       display: block;
-      filter: grayscale(100%) opacity(0.55);
-      transition: filter 0.18s;
+      opacity: 0.85;
+      transition: opacity 0.18s;
     }
 
     .logo-card:hover img {
-      filter: grayscale(0%) opacity(1);
+      opacity: 1;
     }
 
     /* ══════════════════════════════════════
@@ -1100,8 +1104,8 @@
     }
 
     .policy-icon {
-      width: 88px;
-      height: 88px;
+      width: 114px;
+      height: 114px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1237,7 +1241,7 @@
     .expert-section {
       background: #FFFFFF;
       border-top: 1px solid var(--border);
-      padding: 0 40px 0 0;
+      padding: 0;
       overflow: hidden;
     }
 
@@ -1245,31 +1249,33 @@
       max-width: 1100px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 400px 1fr;
-      gap: 72px;
-      align-items: end;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items: stretch;
+      min-height: 600px;
     }
 
-    /* Photo — flush to bottom, no top padding */
+    /* Photo — fills entire left cell */
     .expert-photo {
+      overflow: hidden;
       display: flex;
-      align-items: flex-end;
+      align-items: stretch;
     }
 
     .expert-photo img {
       width: 100%;
-      max-width: 400px;
-      height: auto;
+      height: 100%;
       display: block;
       object-fit: cover;
-      object-position: top center;
+      object-position: center top;
     }
 
     .expert-content {
-      padding: 80px 0 80px;
+      padding: 64px 56px 64px 64px;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      justify-content: center;
     }
 
     .expert-eyebrow {
@@ -1342,11 +1348,9 @@
     }
 
     @media (max-width: 860px) {
-      .expert-section { padding: 0 20px; }
-      .expert-inner { grid-template-columns: 1fr; gap: 0; }
-      .expert-photo { justify-content: center; }
-      .expert-photo img { max-width: 280px; }
-      .expert-content { padding: 40px 0 60px; }
+      .expert-inner { grid-template-columns: 1fr; min-height: unset; }
+      .expert-photo { height: 380px; }
+      .expert-content { padding: 40px 24px 56px; }
       .expert-headline { font-size: 24px; }
     }
 
@@ -1481,7 +1485,7 @@
 
     .final-cta-headline {
       font-size: 56px;
-      font-weight: 900;
+      font-weight: 700;
       color: #FFFFFF;
       letter-spacing: -2px;
       line-height: 1.05;
@@ -2172,9 +2176,6 @@
         <p class="expert-eyebrow">Health Insurance Questions Answered</p>
         <h2 class="expert-headline">Your Health Insurance Questions Answered by our Private Health Insurance Expert</h2>
         <div class="expert-nameplate">
-          <div class="expert-avatar-ring">
-            <img src="paul_mineo.jpeg" alt="Paul Mineo" />
-          </div>
           <div>
             <div class="expert-name">Paul Mineo</div>
             <div class="expert-role">Chief Operating Officer, Konkrd</div>
@@ -2182,7 +2183,6 @@
         </div>
         <p class="expert-bio">Paul Mineo, Chief Operating Officer of Konkrd Life Admin AI service, is a true expert in private health insurance — from time on the phones helping customers, to leading commercial strategy, and everything in between, with over two decades of experience across sales, operations, and insurance markets.</p>
         <p class="expert-bio">Driven by a belief that the customer should always come first, Paul is helping shape a new kind of service, one that challenges the old model and redefines what great advice and genuine support can look like.</p>
-        <a href="#chat" class="feature-cta">Ask Paul a Question</a>
       </div>
 
     </div>
